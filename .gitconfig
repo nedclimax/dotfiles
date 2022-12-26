@@ -1,0 +1,9 @@
+[user]
+	email = maroueneboughoufa@gmail.com
+	name = Marouene Boughoufa
+[core]
+	editor = vim
+[init]
+	defaultBranch = master
+[alias]
+	tree  = log --graph --decorate --pretty=oneline --abbrev-commit --all
