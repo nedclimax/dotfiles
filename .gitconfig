@@ -6,4 +6,4 @@
 [init]
 	defaultBranch = master
 [alias]
-	tree  = log --graph --decorate --pretty=oneline --abbrev-commit --all
+	tree = log --graph --decorate --pretty=oneline --abbrev-commit --all
