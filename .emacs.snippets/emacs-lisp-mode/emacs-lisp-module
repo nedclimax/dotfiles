@@ -4,7 +4,7 @@
 # --
 ;;; ${1:`(file-name-nondirectory (buffer-file-name))`} --- ${2:Package Description} -*- lexical-binding: t -*-
 
-;; Copyright (C) `(format-time-string "%Y" (current-time))` ${3:Alexey Kutepov <reximkut@gmail.com>}
+;; Copyright (C) `(format-time-string "%Y" (current-time))` ${3:Marouene Boughoufa <maroueneboughoufa@gmail.com>}
 
 ;; Author: $3
 ;; URL: $4

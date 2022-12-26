@@ -1,6 +1,8 @@
 (load "~/.emacs.rc/rc.el")
 (load "~/.emacs.rc/misc-rc.el")
 
+(add-to-list 'load-path "~/.emacs.local/")
+
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 (rc-require 'gruber-darker-theme)
@@ -71,3 +73,34 @@
 (rc-require 'powershell)
 (add-to-list 'auto-mode-alist '("\\.ps1\\'" . powershell-mode))
 (add-to-list 'auto-mode-alist '("\\.psm1\\'" . powershell-mode))
+
+;;; nxml
+(add-to-list 'auto-mode-alist '("\\.html\\'" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.xsd\\'" . nxml-mode))
+
+;; Company
+(rc-require 'company)
+
+(global-company-mode)
+
+;;; Move Text
+(rc-require 'move-text)
+(global-set-key (kbd "M-p") 'move-text-up)
+(global-set-key (kbd "M-n") 'move-text-down)
+
+;; Packages that don't require configuration
+(rc-require
+ 'glsl-mode
+ 'lua-mode
+ 'cmake-mode
+ 'csharp-mode
+ 'jinja2-mode
+ 'markdown-mode
+ 'toml-mode
+ 'kotlin-mode
+ 'go-mode
+ 'php-mode
+ 'qml-mode
+ 'typescript-mode)
+
+
