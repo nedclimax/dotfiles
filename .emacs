@@ -20,6 +20,13 @@
 (delete-selection-mode 1)
 (global-auto-revert-mode 1)
 
+;; Window
+(global-set-key (kbd "C-M-l") 'windmove-right)
+(global-set-key (kbd "C-M-h") 'windmove-left)
+(global-set-key (kbd "C-M-k") 'windmove-up)
+(global-set-key (kbd "C-M-j") 'windmove-down)
+
+
 ;;; IDO
 (rc-require 'smex)
 (ido-mode 1)
@@ -78,10 +85,14 @@
 (add-to-list 'auto-mode-alist '("\\.html\\'" . nxml-mode))
 (add-to-list 'auto-mode-alist '("\\.xsd\\'" . nxml-mode))
 
+;; Nasm
+(rc-require 'nasm-mode)
+;;(add-to-list 'auto-mode-alist '("\\.asm\\'" . nasm-mode))
+
 ;; Company
 (rc-require 'company)
 
-(global-company-mode)
+(global-company-mode 1)
 
 ;;; Move Text
 (rc-require 'move-text)
@@ -125,9 +136,13 @@
             (interactive)
             (setq-local fill-paragraph-function 'astyle-buffer)))
 
+(require 'fasm-mode)
+(add-to-list 'auto-mode-alist '("\\.asm\\'" . fasm-mode))
+
 (require 'compile)
+
+(global-set-key (kbd "C-c c") 'compile)
 
 (add-to-list 'compilation-error-regexp-alist
              '("\\([a-zA-Z0-9\\.]+\\)(\\([0-9]+\\)\\(,\\([0-9]+\\)\\)?) \\(Warning:\\)?"
                1 2 (4) (5)))
-
