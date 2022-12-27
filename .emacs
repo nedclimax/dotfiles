@@ -1,8 +1,6 @@
 (load "~/.emacs.rc/rc.el")
 (load "~/.emacs.rc/misc-rc.el")
 
-(add-to-list 'load-path "~/.emacs.local/")
-
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 (rc-require 'gruber-darker-theme)
@@ -69,6 +67,8 @@
 
 (yas-global-mode 1)
 
+(global-set-key (kbd "C-c e") 'yas-expand)
+
 ;; Powershell
 (rc-require 'powershell)
 (add-to-list 'auto-mode-alist '("\\.ps1\\'" . powershell-mode))
@@ -93,6 +93,7 @@
  'glsl-mode
  'lua-mode
  'cmake-mode
+ 'meson-mode
  'csharp-mode
  'jinja2-mode
  'markdown-mode
@@ -103,4 +104,30 @@
  'qml-mode
  'typescript-mode)
 
+(add-to-list 'load-path "~/.emacs.local/")
+
+(require 'simpc-mode)
+(add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
+
+(defun astyle-buffer (&optional justify)
+  (interactive)
+  (let ((saved-line-number (line-number-at-pos)))
+    (shell-command-on-region
+     (point-min)
+     (point-max)
+     "astyle --style=kr"
+     nil
+     t)
+    (goto-line saved-line-number)))
+
+(add-hook 'simpc-mode-hook
+          (lambda ()
+            (interactive)
+            (setq-local fill-paragraph-function 'astyle-buffer)))
+
+(require 'compile)
+
+(add-to-list 'compilation-error-regexp-alist
+             '("\\([a-zA-Z0-9\\.]+\\)(\\([0-9]+\\)\\(,\\([0-9]+\\)\\)?) \\(Warning:\\)?"
+               1 2 (4) (5)))
 
