@@ -1,6 +1,6 @@
 # dotfiles
 
-Config files for some programs thet I actively use
+Settings for some programs that I actively use
 
 ## Requirements
 
