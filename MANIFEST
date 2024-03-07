@@ -1,5 +1,2 @@
-.emacs|symlink|
-.emacs.rc|symlink|
-.emacs.local|symlink|
-.emacs.snippets|symlink|
+.emacs.d|symlink|
 .gitconfig|symlink|
