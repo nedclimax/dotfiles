@@ -61,6 +61,10 @@
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
+(autoload 'powershell-mode "powershe-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.ps1\\'" . powershell-mode))
+(add-to-list 'auto-mode-alist '("\\.psm\\'" . powershell-mode))
+
 (require 'dimmer)
 
 (setq dimmer-fraction 0.3)
