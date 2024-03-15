@@ -1,4 +1,4 @@
-;; -*- coding: utf-8 -*-
+;; -*- coding: utf-8; lexical-binding: t -*-
 
 ;; Very crappy emacs config
 
@@ -103,6 +103,7 @@
   (package-refresh-contents)
   (package-install 'company))
 
+(require 'company)
 (global-company-mode 1)
 
 ;; NOTE: LSP intergration
