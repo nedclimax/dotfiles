@@ -15,7 +15,6 @@
     }
 }
 
-
 function Unsymlink-File {
     $DestPath = $args[0]
     $SourcePath = $args[1]
@@ -46,7 +45,7 @@ function Deploy-Manifest {
         $DeployOp = $ManifestRow.operation
         $SourcePath = "$PSScriptRoot\$DeployFile"
         $DestPath = "$EmacsHome\$DeployFile"
-        
+
         switch ($DeployOp) {
             "symlink" {
                 Symlink-File $DestPath $SourcePath
@@ -72,7 +71,7 @@ function Undeploy-Manifest {
         $DeployOp = $ManifestRow.operation
         $SourcePath = "$PSScriptRoot\$DeployFile"
         $DestPath = "$EmacsHome\$DeployFile"
-        
+
         switch ($DeployOp) {
             "symlink" {
                 Unsymlink-File $DestPath $SourcePath

@@ -4,7 +4,7 @@ Settings for some programs that I actively use
 
 ## Requirements
 
-- Emacs 24.5+
+- Emacs 27+
 - Git
 - Any Linux distro or Windows 7+
 - Internet connection

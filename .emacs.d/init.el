@@ -1,12 +1,12 @@
 ;; -*- coding: utf-8; lexical-binding: t -*-
 
-;; Very crappy emacs config
+;; Very crappy and messy emacs config
 
 ;; TODO for .emacs.d/init.el
 ;; - fix switch/case indentation for C/C++
 ;; - make emacs able to find pairs of .c/.h file in C/C++ modes
-;; - (Ma)Git integration
-;; - Replace isearch with something like swiper
+;; - Replace isearch with something like `swiper'
+;; - Refactor packages section with `use-package'
 
 (setq gc-cons-percentage 0.6)
 (setq gc-cons-threshold most-positive-fixnum)
@@ -16,6 +16,7 @@
 (define-key prog-mode-map (kbd "S-<tab>") 'indent-for-tab-command)
 (define-key prog-mode-map (kbd "<tab>") 'dabbrev-expand)
 
+;; NOTE: System detection
 (defconst ned-windows (eq system-type 'windows-nt))
 (defconst ned-linux (eq system-type 'gnu-linux))
 (defconst ned-mac (eq system-type 'darwin))
@@ -37,10 +38,11 @@
 
 (global-display-line-numbers-mode 1)
 (setq display-line-numbers-type 'relative)
-(setq-default display-line-numbers-width 3)
+(setq-default display-line-numbers-width 4)
 
 (add-to-list 'load-path "~/.emacs.d/lisp")
 
+;; NOTE: Languages
 (autoload 'glsl-mode "glsl-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
 (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
@@ -61,9 +63,17 @@
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
-(autoload 'powershell-mode "powershe-mode" nil t)
+(autoload 'powershell-mode "powershell-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.ps1\\'" . powershell-mode))
 (add-to-list 'auto-mode-alist '("\\.psm\\'" . powershell-mode))
+;; End Languages
+
+;; NOTE: hex editor for binary files
+(add-to-list 'auto-mode-alist '("\\.bin\\'" . hexl-mode))
+(add-to-list 'auto-mode-alist '("\\.out\\'" . hexl-mode))
+(add-to-list 'auto-mode-alist '("\\.exe\\'" . hexl-mode))
+(add-to-list 'auto-mode-alist '("\\.pdb\\'" . hexl-mode))
+(add-to-list 'auto-mode-alist '("\\.dll\\'" . hexl-mode))
 
 (require 'dimmer)
 
@@ -71,89 +81,109 @@
 (dimmer-mode t)
 
 ;;; Packages
-
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (unless package--initialized (package-initialize))
 
+
 ;; NOTE: multiple cursors
 (unless (package-installed-p 'multiple-cursors)
   (package-refresh-contents)
   (package-install 'multiple-cursors))
-
-
 (require 'multiple-cursors)
-
 (setq mc/always-run-for-all t)
-
 (define-key mc/keymap (kbd "<return>") nil)
-
 (multiple-cursors-mode 1)
-
 (global-set-key (kbd "H-SPC") 'set-rectangular-region-anchor)
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-c") 'mc/mark-all-like-this)
 (global-set-key (kbd "C-c C-SPC") 'mc/edit-lines)
+;; End multiple cursors
 
 
-;; NOTE: auto completio pop up
+;; NOTE: auto completion pop up
 (unless (package-installed-p 'company)
   (package-refresh-contents)
   (package-install 'company))
-
 (require 'company)
 (global-company-mode 1)
+;; End auto completion pop up
+
+(unless (package-installed-p 'zig-mode)
+  (package-refresh-contents)
+  (package-install 'zig-mode))
+(require 'zig-mode)
 
 ;; NOTE: LSP intergration
 (unless (package-installed-p 'eglot)
   (package-refresh-contents)
   (package-install 'eglot))
-
 (require 'eglot)
-
 (define-key eglot-mode-map (kbd "<tab>") 'company-complete)
-
 (defun do-nothing(&rest params))
-
 (fset 'eglot-format 'do-nothing)
 (fset 'eglot-format-buffer 'do-nothing)
-
 (add-to-list 'eglot-server-programs
              `((c++-mode c-mode)
                . ("clangd"
                   "--clang-tidy"
                   "--header-insertion=never"
                   "--inlay-hints=false")))
-
 (add-hook 'c-mode-hook 'eglot-ensure)
 (add-hook 'c++-mode-hook 'eglot-ensure)
-
 (add-to-list 'eglot-server-programs '((odin-mode) "ols"))
 (add-hook 'odin-mode-hook 'eglot-ensure)
-
+(add-to-list 'eglot-server-programs '((zig-mode) "zls"))
+(add-hook 'zig-mode-hook 'eglot-ensure)
 (add-to-list 'eglot-server-programs '((glsl-mode) "glsl_analyzer"))
 (add-hook 'glsl-mode-hook 'eglot-ensure)
+(add-to-list 'eglot-server-programs '((latex-mode) "texlab"))
+(add-hook 'latex-mode-hook 'eglot-ensure)
+;; End LSP integration
 
 ;; NOTE: Project management
 (unless (package-installed-p 'projectile)
   (package-refresh-contents)
   (package-install 'projectile))
-
 (require 'projectile)
-
 ;; TODO: Register custom project types
 ;; (projectile-register-project-type nil '("build.bat" "build.sh")
 ;;                                   :compile "build"
 ;;                                   :run "build run")
-
 (projectile-mode t)
+;; End Project management
+
 
 ;; NOTE: Git integration
 (unless (package-installed-p 'magit)
   (package-refresh-contents)
   (package-install 'magit))
+;; End Git integration
+
+
+;; NOTE: AucTeX
+(unless (package-installed-p 'auctex)
+  (package-refresh-contents)
+  (package-install 'auctex))
+(require 'latex)
+(setq TeX-auto-save t)
+(setq TeX-parse-self t)
+(setq TeX-engine-alist '((default
+                          "Tectonic"
+                          "tectonic -X compile -f plain %T"
+                          "tectonic -X watch"
+                          nil)))
+(setq LaTeX-command-style '(("" "%(latex)")))
+(setq TeX-process-asynchronous t
+      TeX-check-TeX nil
+      TeX-engine 'default)
+(let ((tex-list (assoc "TeX" TeX-command-list))
+      (latex-list (assoc "LaTeX" TeX-command-list)))
+  (setf (cadr tex-list) "%(tex)"
+        (cadr latex-list) "%l"))
+;; End Auctex
 
 ;;; End Packages
 
@@ -161,8 +191,6 @@
 (global-set-key (kbd "C-$") 'hs-toggle-hiding)
 
 (require 'cc-mode)
-
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; NOTE: UTF-8 as default encoding
 (set-language-environment 'utf-8)
@@ -175,25 +203,24 @@
 (set-terminal-coding-system 'utf-8-unix)
 
 ;; NOTE: Colors & UI
-(tool-bar-mode 0)
-(menu-bar-mode 0)
-(scroll-bar-mode 0)
+(if (fboundp 'tool-bar-mode)
+    (tool-bar-mode 0))
+(if (fboundp 'menu-bar-mode)
+    (menu-bar-mode 0))
+(if (fboundp 'scroll-bar-mode)
+    (scroll-bar-mode 0))
 (column-number-mode 1)
 
-(setq text-quoting-style 'grave)
+(add-to-list 'default-frame-alist '(fullscreen . maximized)) ;; Fullscreen on startup
 
-(set-fringe-mode '(1 . 1))
+(set-fringe-mode '(1 . 1)) ;; Remove fringes
 
 (cond
  ((find-font (font-spec :name "Iosevka Mono"))
   (set-face-attribute 'default nil :font "Iosevka Mono" :height 100))
  ((find-font (font-spec :name "Consolas"))
   (set-face-attribute 'default nil :font "Consolas" :height 100 :weight 'medium)))
-;; (set-face-attribute 'default nil
-;;                     :font "Courier New"
-;;                     :height 100
-;;                     :weight 'semi-bold)
-
+(set-face-attribute 'default nil :font "Consolas" :height 100 :weight 'medium)
 (global-hl-line-mode 0)
 (set-face-background 'hl-line "#252535")
 
@@ -260,7 +287,9 @@
       mouse-wheel-scroll-amount '(2 ((shift) . 1))
       mouse-wheel-progressive-speed nil
       mouse-wheel-follow-mouse t)
+;; End Colors & UI
 
+;; Hooks
 (add-hook 'window-setup-hook (lambda ()
                                (interactive)
                                (toggle-truncate-lines t)
@@ -287,6 +316,7 @@
                            (make-local-variable 'truncate-lines)
                            (setq truncate-lines nil)
                            (visual-line-mode 1)))
+;; End Hooks
 
 (setq create-lockfiles nil)
 (setq make-backup-files nil)
@@ -311,14 +341,11 @@
 (setq backward-delete-char-untabify-method nil)
 
 (require 'ido)
-
 (fido-mode 1)
 (fido-vertical-mode 1)
 
 (require 'compile)
-
 (setq compilation-scroll-output t)
-
 (add-hook 'compilation-mode-hook (lambda ()
                                    (make-local-variable 'truncate-lines)
                                    (setq truncate-lines nil)))
@@ -374,7 +401,6 @@
                                 (other-window -1)))
 
 (global-set-key (kbd "C-z") 'undo)
-
 (global-set-key (kbd "C-f") 'find-file)
 (global-set-key (kbd "C-b") 'switch-to-buffer)
 (global-set-key (kbd "C-M-f") 'find-file-other-window)
@@ -421,6 +447,7 @@
 (diminish 'abbrev-mode)
 (diminish 'eldoc-mode)
 (diminish 'company-mode)
+(diminish 'projectile-mode)
 (diminish 'gcmh-mode)
 (diminish 'hs-minor-mode)
 
