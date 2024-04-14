@@ -74,6 +74,9 @@
 (add-to-list 'auto-mode-alist '("\\.exe\\'" . hexl-mode))
 (add-to-list 'auto-mode-alist '("\\.pdb\\'" . hexl-mode))
 (add-to-list 'auto-mode-alist '("\\.dll\\'" . hexl-mode))
+(add-to-list 'auto-mode-alist '("\\.a\\'" . hexl-mode))
+(add-to-list 'auto-mode-alist '("\\.la\\'" . hexl-mode))
+(add-to-list 'auto-mode-alist '("\\.so\\'" . hexl-mode))
 
 (require 'dimmer)
 
@@ -111,11 +114,6 @@
 (global-company-mode 1)
 ;; End auto completion pop up
 
-(unless (package-installed-p 'zig-mode)
-  (package-refresh-contents)
-  (package-install 'zig-mode))
-(require 'zig-mode)
-
 ;; NOTE: LSP intergration
 (unless (package-installed-p 'eglot)
   (package-refresh-contents)
@@ -135,8 +133,8 @@
 (add-hook 'c++-mode-hook 'eglot-ensure)
 (add-to-list 'eglot-server-programs '((odin-mode) "ols"))
 (add-hook 'odin-mode-hook 'eglot-ensure)
-(add-to-list 'eglot-server-programs '((zig-mode) "zls"))
-(add-hook 'zig-mode-hook 'eglot-ensure)
+;; (add-to-list 'eglot-server-programs '((zig-mode) "zls"))
+;; (add-hook 'zig-mode-hook 'eglot-ensure)
 (add-to-list 'eglot-server-programs '((glsl-mode) "glsl_analyzer"))
 (add-hook 'glsl-mode-hook 'eglot-ensure)
 (add-to-list 'eglot-server-programs '((latex-mode) "texlab"))
@@ -193,11 +191,9 @@
 (require 'cc-mode)
 
 ;; NOTE: UTF-8 as default encoding
-(set-language-environment 'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-
-(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8-unix)
+(set-keyboard-coding-system 'utf-8-unix)
+(prefer-coding-system 'utf-8-unix)
 
 ;; NOTE: fixes terminal output on Windows
 (set-terminal-coding-system 'utf-8-unix)

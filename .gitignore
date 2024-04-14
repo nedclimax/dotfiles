@@ -4,3 +4,5 @@
 .emacs.d/elpa/
 .emacs.d/transient/
 .emacs.d/server/
+.emacs.d/projects
+.emacs.d/projectile.cache
