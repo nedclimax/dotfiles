@@ -1,0 +1,19 @@
+{
+    "links": [
+        {
+            "name": ".emacs.d",
+            "destination": "~/.emacs.d"
+        },
+        {
+            "name": ".gitconfig",
+            "destination": "~/.gitconfig"
+        },
+        {
+            "name": "nvim",
+            "destination": {
+                 "windows": "~/AppData/Local/nvim",
+                 "linux": "~/.config/nvim"
+            }
+        }
+    ]
+}
