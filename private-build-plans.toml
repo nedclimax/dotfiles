@@ -1,6 +1,6 @@
 [buildPlans.IosevkaMono]
 family = "Iosevka Mono"
-spacing = "term"
+spacing = "fixed"
 serifs = "sans"
 noCvSs = true
 exportGlyphNames = false

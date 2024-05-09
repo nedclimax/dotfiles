@@ -27,7 +27,7 @@
 
 ;;; Code:
 
-(require 'js) ; For indentation
+(require 'cc-mode) ; For indentation
 (require 'project) ; For build/compile commands
 
 (defgroup odin nil
@@ -141,7 +141,7 @@
   (setq-local comment-start "/*")
   (setq-local comment-end "*/")
 
-  (setq-local indent-line-function #'js-indent-line)
+  (setq-local indent-line-function #'c-indent-line)
 
   (setq-local electric-indent-chars
               (append "{}():;," electric-indent-chars)))

@@ -1,4 +1,4 @@
-# dotfiles
+# Ned's Dotfiles
 
 Settings for some programs that I actively use
 
@@ -7,7 +7,7 @@ Settings for some programs that I actively use
 - Emacs 27+
 - Git
 - Any Linux distro or Windows 7+
-- Internet connection
+- An internet connection
 
 ## Deployment
 
