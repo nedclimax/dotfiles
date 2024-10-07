@@ -133,4 +133,76 @@
       (indent-according-to-mode)
     (beginning-of-line)))
 
+(defun underline-line-with (char)
+  "Insert some char below at current line."
+  (interactive "cType one char: ")
+  (save-excursion
+    (let ((length (- (point-at-eol) (point-at-bol))))
+      (end-of-line)
+      (insert "\n")
+      (insert (make-string length char)))))
+
+(defun comment-or-uncomment-region+ ()
+  "This function is to comment or uncomment a line or a region."
+  (interactive)
+  (let (beg end)
+    (if mark-active
+        (progn
+          (setq beg (region-beginning))
+          (setq end (region-end)))
+      (setq beg (line-beginning-position))
+      (setq end (line-end-position)))
+    (save-excursion
+      (comment-or-uncomment-region beg end))))
+
+(defun upcase-char (arg)
+  "Replace character with uppercase version."
+  (interactive "P")
+  (upcase-region (point) (+ (point) (or arg 1)))
+  (forward-char (or arg 1)))
+
+(defun downcase-char (arg)
+  "Replace character with lowercase version."
+  (interactive "P")
+  (downcase-region (point) (+ (point) (or arg 1)))
+  (forward-char (or arg 1)))
+
+(require 'cl)
+
+(defun insert-line-number (beg end &optional start-line)
+  "Insert line numbers into buffer."
+  (interactive "r")
+  (save-excursion
+    (let ((max (count-lines beg end))
+          (line (or start-line 1))
+          (counter 1))
+      (goto-char beg)
+      (while (<= counter max)
+        (insert (format "%0d " line))
+        (beginning-of-line 2)
+        (incf line)
+        (incf counter)))))
+
+(defun insert-line-number+ ()
+  "Insert line number into buffer."
+  (interactive)
+  (if mark-active
+      (insert-line-number (region-beginning) (region-end) (read-number "Start line: "))
+    (insert-line-number (point-min) (point-max))))
+
+(defun delete-chars-hungry-forward (&optional reverse)
+  "Delete chars forward use `hungry' style.
+Optional argument REVERSE default is delete forward, if reverse is non-nil delete backward."
+  (delete-region
+   (point)
+   (progn
+     (if reverse
+         (skip-chars-backward " \t\n\r")
+       (skip-chars-forward " \t\n\r"))
+     (point))))
+
+(defun delete-chars-hungry-backward ()
+  "Delete chars backward use `hungry' style."
+  (delete-chars-hungry-forward t))
+
 (provide 'text-edit)
