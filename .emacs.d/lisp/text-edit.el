@@ -104,6 +104,11 @@
       (forward-line +1))
     (comment-or-uncomment-region+)))
 
+(defun duplicate-line-below-comment ()
+  "Duplicate current line below, and comment current line."
+  (interactive)
+  (duplicate-line-above-comment t))
+
 (defun mark-line ()
   "Mark one whole line, similar to `mark-paragraph'."
   (interactive)
