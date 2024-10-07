@@ -1,8 +1,6 @@
 [user]
 	email = maroueneboughoufa@gmail.com
 	name = Marouene Boughoufa
-[core]
-	editor = vim
 [init]
 	defaultBranch = master
 [alias]
