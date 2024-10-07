@@ -10,7 +10,7 @@
 (setq gc-cons-percentage 0.6)
 (setq gc-cons-threshold most-positive-fixnum)
 
-(setq warning-minimum-level :emergency)
+(setq warning-minimum-level :error)
 
 (define-key prog-mode-map (kbd "S-<tab>") 'indent-for-tab-command)
 (define-key prog-mode-map (kbd "<tab>") 'dabbrev-expand)
@@ -106,6 +106,18 @@
 (setq dabbrev-upcase-means-case-search t)
 
 (abbrev-mode 1)
+
+(require 'dired-x)
+
+(put 'dired-find-alternate-file 'disabled nil)
+
+(define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+(define-key dired-mode-map (kbd "<tab>") (lambda () (interactive) (find-alternate-file "..")))
+(setq dired-kill-when-opening-new-dired-buffer t)
+(setq dired-mouse-drag-files t)
+(setq-default dired-listing-switches "-aBFhlvD  --group-directories-first")
+(setq-default dired-dwim-target t)
+(setq dired-auto-revert-buffer t)
 
 (require 'text-edit)
 
@@ -351,7 +363,9 @@
  ((find-font (font-spec :name "Fira Code"))
   (set-face-attribute 'default nil :font "Fira Code" :height 100 :weight 'medium))
  ((find-font (font-spec :name "Iosevka Mono"))
-  (set-face-attribute 'default nil :font "Iosevka Mono" :height 100)))
+  (set-face-attribute 'default nil :font "Iosevka Mono" :height 100))
+ ((find-font (font-spec :name "monospace"))
+  (set-face-attribute 'default nil :font "monospace" :height 110)))
 
 (global-hl-line-mode 0)
 (set-face-background 'hl-line "#252535")
