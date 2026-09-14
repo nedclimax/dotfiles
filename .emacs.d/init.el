@@ -119,6 +119,12 @@
 (setq-default dired-dwim-target t)
 (setq dired-auto-revert-buffer t)
 
+;; Auto-refresh dired on file change
+(add-hook 'dired-mode-hook 'auto-revert-mode)
+
+(defalias 'list-buffers 'ibuffer) ;; Make ibuffer default
+(add-hook 'ibuffer-mode-hook 'ibuffer-auto-mode) ;; Auto refresh Ibuffer 
+
 (require 'text-edit)
 
 (global-set-key (kbd "C-,") 'other-window)
