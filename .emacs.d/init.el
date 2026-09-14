@@ -29,7 +29,7 @@
 
 (if ned-windows
     (setq ned-buildscript "build.bat")
-  (setq ned-buildscript "build.sh"))
+  (setq ned-buildscript "./build.sh"))
 
 (find-function-setup-keys)
 
@@ -222,7 +222,6 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (unless package--initialized (package-initialize))
 
-
 ;; NOTE: multiple cursors
 (unless (package-installed-p 'multiple-cursors)
   (package-refresh-contents)
@@ -237,7 +236,6 @@
 (global-set-key (kbd "C-c C-c") 'mc/mark-all-like-this)
 (global-set-key (kbd "C-c C-SPC") 'mc/edit-lines)
 ;; End multiple cursors
-
 
 ;; NOTE: auto completion pop up
 (unless (package-installed-p 'company)
@@ -305,7 +303,6 @@
   (package-install 'magit))
 ;; End Git integration
 
-
 ;; NOTE: AucTeX
 (unless (package-installed-p 'auctex)
   (package-refresh-contents)
@@ -366,10 +363,10 @@
 (cond
  ((find-font (font-spec :name "Consolas"))
   (set-face-attribute 'default nil :font "Consolas" :height 100 :weight 'medium))
- ((find-font (font-spec :name "Fira Code"))
-  (set-face-attribute 'default nil :font "Fira Code" :height 100 :weight 'medium))
  ((find-font (font-spec :name "Iosevka Mono"))
   (set-face-attribute 'default nil :font "Iosevka Mono" :height 100))
+ ((find-font (font-spec :name "Liberation Mono"))
+  (set-face-attribute 'default nil :font "Liberation Mono" :height 100 :weight 'medium))
  ((find-font (font-spec :name "monospace"))
   (set-face-attribute 'default nil :font "monospace" :height 110)))
 
